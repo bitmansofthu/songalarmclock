@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.BroadcastReceiver;
 import android.os.Parcel;
+import android.support.v4.app.NotificationCompat;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -177,7 +178,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         // silenced.
         String label = alarm.getLabelOrDefault(context);
 
-        Notification.Builder builder = new Notification.Builder();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setWhen(alarm.time);
         builder.setTicker(label);
         builder.setSmallIcon(R.drawable.stat_notify_alarm);
@@ -186,12 +187,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         builder.setAutoCancel(true);
 
         Notification n = builder.build();
-        Notification n = new Notification(R.drawable.stat_notify_alarm,
-                label, alarm.time);
-        n.setLatestEventInfo(context, label,
-                context.getString(R.string.alarm_alert_alert_silenced, timeout),
-                intent);
-        n.flags |= Notification.FLAG_AUTO_CANCEL;
+
         // We have to cancel the original notification since it is in the
         // ongoing section and we want the "killed" notification to be a plain
         // notification.
