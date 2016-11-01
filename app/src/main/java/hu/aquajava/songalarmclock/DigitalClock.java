@@ -140,12 +140,12 @@ public class DigitalClock extends LinearLayout {
             filter.addAction(Intent.ACTION_TIME_TICK);
             filter.addAction(Intent.ACTION_TIME_CHANGED);
             filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
-            mContext.registerReceiver(mIntentReceiver, filter, null, mHandler);
+            getContext().registerReceiver(mIntentReceiver, filter, null, mHandler);
         }
 
         /* monitor 12/24-hour display preference */
         mFormatChangeObserver = new FormatChangeObserver();
-        mContext.getContentResolver().registerContentObserver(
+        getContext().getContentResolver().registerContentObserver(
                 Settings.System.CONTENT_URI, true, mFormatChangeObserver);
 
         updateTime();
@@ -164,9 +164,9 @@ public class DigitalClock extends LinearLayout {
         }
 
         if (mLive) {
-            mContext.unregisterReceiver(mIntentReceiver);
+            getContext().unregisterReceiver(mIntentReceiver);
         }
-        mContext.getContentResolver().unregisterContentObserver(
+        getContext().getContentResolver().unregisterContentObserver(
                 mFormatChangeObserver);
     }
 
@@ -187,7 +187,7 @@ public class DigitalClock extends LinearLayout {
     }
 
     private void setDateFormat() {
-        mFormat = Alarms.get24HourMode(mContext) ? Alarms.M24 : M12;
+        mFormat = Alarms.get24HourMode(getContext()) ? Alarms.M24 : M12;
         mAmPm.setShowAmPm(mFormat == M12);
     }
 

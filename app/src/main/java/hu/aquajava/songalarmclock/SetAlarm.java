@@ -111,50 +111,22 @@ public class SetAlarm extends PreferenceActivity
         // their own.
         getListView().setItemsCanFocus(true);
 
-        // Grab the content view so we can modify it.
-        FrameLayout content = (FrameLayout) getWindow().getDecorView()
-                .findViewById(com.android.internal.R.id.content);
-
-        // Get the main ListView and remove it from the content view.
-        ListView lv = getListView();
-        content.removeView(lv);
-
-        // Create the new LinearLayout that will become the content view and
-        // make it vertical.
-        LinearLayout ll = new LinearLayout(this);
-        ll.setOrientation(LinearLayout.VERTICAL);
-
-        // Have the ListView expand to fill the screen minus the save/cancel
-        // buttons.
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT);
-        lp.weight = 1;
-        ll.addView(lv, lp);
-
-        // Inflate the buttons onto the LinearLayout.
-        View v = LayoutInflater.from(this).inflate(
-                R.layout.save_cancel_alarm, ll);
-
         // Attach actions to each button.
-        Button b = (Button) v.findViewById(R.id.alarm_save);
-        b.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    // Enable the alarm when clicking "Done"
-                    mEnabled = true;
-                    saveAlarm();
-                    finish();
-                }
-        });
-        b = (Button) v.findViewById(R.id.alarm_cancel);
-        b.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    finish();
-                }
-        });
-
-        // Replace the old content view with our new one.
-        setContentView(ll);
+//        Button b = (Button) v.findViewById(R.id.alarm_save);
+//        b.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View v) {
+//                    // Enable the alarm when clicking "Done"
+//                    mEnabled = true;
+//                    saveAlarm();
+//                    finish();
+//                }
+//        });
+//        b = (Button) v.findViewById(R.id.alarm_cancel);
+//        b.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View v) {
+//                    finish();
+//                }
+//        });
     }
 
     @Override

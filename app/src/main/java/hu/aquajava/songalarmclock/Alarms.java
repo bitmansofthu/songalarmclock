@@ -153,7 +153,6 @@ public class Alarms {
      * @param hour           corresponds to the HOUR column
      * @param minutes        corresponds to the MINUTES column
      * @param daysOfWeek     corresponds to the DAYS_OF_WEEK column
-     * @param time           corresponds to the ALARM_TIME column
      * @param vibrate        corresponds to the VIBRATE column
      * @param message        corresponds to the MESSAGE column
      * @param alert          corresponds to the ALERT column
@@ -356,8 +355,6 @@ public class Alarms {
 
         am.set(AlarmManager.RTC_WAKEUP, atTimeInMillis, sender);
 
-        setStatusBarIcon(context, true);
-
         Calendar c = Calendar.getInstance();
         c.setTime(new java.util.Date(atTimeInMillis));
         String timeString = formatDayAndTime(context, c);
@@ -367,7 +364,6 @@ public class Alarms {
     /**
      * Disables alert in AlarmManger and StatusBar.
      *
-     * @param id Alarm ID.
      */
     static void disableAlert(Context context) {
         AlarmManager am = (AlarmManager)
@@ -376,7 +372,6 @@ public class Alarms {
                 context, 0, new Intent(ALARM_ALERT_ACTION),
                 PendingIntent.FLAG_CANCEL_CURRENT);
         am.cancel(sender);
-        setStatusBarIcon(context, false);
         saveNextAlarm(context, "");
     }
 
@@ -453,15 +448,6 @@ public class Alarms {
 
         enableAlert(context, alarm, time);
         return true;
-    }
-
-    /**
-     * Tells the StatusBar whether the alarm is enabled or disabled
-     */
-    private static void setStatusBarIcon(Context context, boolean enabled) {
-        Intent alarmChanged = new Intent(Intent.ACTION_ALARM_CHANGED);
-        alarmChanged.putExtra("alarmSet", enabled);
-        context.sendBroadcast(alarmChanged);
     }
 
     /**

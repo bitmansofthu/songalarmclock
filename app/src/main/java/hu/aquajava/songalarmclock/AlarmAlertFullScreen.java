@@ -27,6 +27,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -170,14 +171,16 @@ public class AlarmAlertFullScreen extends Activity {
         PendingIntent broadcast =
                 PendingIntent.getBroadcast(this, mAlarm.id, cancelSnooze, 0);
         NotificationManager nm = getNotificationManager();
-        Notification n = new Notification(R.drawable.stat_notify_alarm,
-                label, 0);
-        n.setLatestEventInfo(this, label,
-                getString(R.string.alarm_notify_snooze_text,
-                    Alarms.formatTime(this, c)), broadcast);
-        n.flags |= Notification.FLAG_AUTO_CANCEL
-                | Notification.FLAG_ONGOING_EVENT;
-        nm.notify(mAlarm.id, n);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setWhen(0);
+        builder.setTicker(label);
+        builder.setSmallIcon(R.drawable.stat_notify_alarm);
+        builder.setContentTitle(label);
+        builder.setContentText(getString(R.string.alarm_notify_snooze_text,
+                Alarms.formatTime(this, c)));
+        builder.setOngoing(true);
+        builder.setAutoCancel(true);
+        nm.notify(mAlarm.id, builder.build());
 
         String displayTime = getString(R.string.alarm_alert_snooze_set,
                 snoozeMinutes);

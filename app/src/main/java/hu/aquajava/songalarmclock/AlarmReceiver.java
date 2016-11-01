@@ -28,6 +28,7 @@ import android.support.v4.app.NotificationCompat;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Glue class: connects AlarmAlert IntentReceiver to AlarmAlert
@@ -74,7 +75,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         // information in bug reports.
         long now = System.currentTimeMillis();
         SimpleDateFormat format =
-                new SimpleDateFormat("HH:mm:ss.SSS aaa");
+                new SimpleDateFormat("HH:mm:ss.SSS aaa", Locale.US);
         Log.v("AlarmReceiver.onReceive() id " + alarm.id + " setFor "
                 + format.format(new Date(alarm.time)));
 
@@ -137,19 +138,20 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Use the alarm's label or the default label as the ticker text and
         // main text of the notification.
         String label = alarm.getLabelOrDefault(context);
-        Notification n = new Notification(R.drawable.stat_notify_alarm,
-                label, alarm.time);
-        n.setLatestEventInfo(context, label,
-                context.getString(R.string.alarm_notify_text),
-                pendingNotify);
-        n.flags |= Notification.FLAG_SHOW_LIGHTS
-                | Notification.FLAG_ONGOING_EVENT;
-        n.defaults |= Notification.DEFAULT_LIGHTS;
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        builder.setWhen(alarm.time);
+        builder.setTicker(label);
+        builder.setSmallIcon(R.drawable.stat_notify_alarm);
+        builder.setContentTitle(label);
+        builder.setContentText(context.getString(R.string.alarm_notify_text));
+        builder.setOngoing(true);
+        builder.setDefaults(NotificationCompat.DEFAULT_LIGHTS);
 
         // Send the notification using the alarm id to easily identify the
         // correct notification.
         NotificationManager nm = getNotificationManager(context);
-        nm.notify(alarm.id, n);
+        nm.notify(alarm.id, builder.build());
     }
 
     private NotificationManager getNotificationManager(Context context) {
